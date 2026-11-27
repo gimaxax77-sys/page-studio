@@ -1,7 +1,8 @@
 // 페이지 공방 앱 — 블록 쌓기 · 순서 끌기 · 꾸미기 · 페이지 목록 · 미리보기 · 내보내기(파일 · 코드 복사). 기반 ui.js · 입력 칸 fields.js · 조립 engine.js
 (function () {
   'use strict';
-  var U = window.PSUI, F = window.PSFields, W = window.PSWizard, el = U.el, $ = U.$, DB = U.DB;
+  var U = window.PSUI, F = window.PSFields, W = window.PSWizard, EZ = window.PSEasy, el = U.el, $ = U.$, DB = U.DB;
+  function guided() { return EZ.active() || W.active(); }
   var D = {}, E = null;
   var S = { list: [], cur: null, tab: 'blocks', sel: null, dev: 'phone', fsel: 0, themeFilter: 'all', withFonts: true };
   var BLANK = { title: '새 페이지', theme: 'daisy-nord', look: 'plain', motion: 1, font: { body: 'pretendard' }, blocks: [{ part: 'header' }, { part: 'hero' }, { part: 'footer' }] };
@@ -22,13 +23,13 @@
     if (errs.length) { fr.srcdoc = '<p style="font:15px sans-serif;padding:1rem">' + E.esc(errs.join(' · ')) + '</p>'; return; }
     var f = E.fontsOf(d);  // 미리보기는 글꼴 파일 주소를 그대로(필요한 묶음만 브라우저가 받음)
     fr.srcdoc = E.buildDoc(d, fontCssFor(f.head === f.body ? [f.body] : [f.body, f.head], function (p) { return "'data/fonts/" + p.file + "'"; }));
-    $('#vinfo').textContent = d.blocks.length + '개 블록 · ' + E.tokens[d.theme].label;
+    $('#vinfo').textContent = EZ.active() ? '내 페이지 미리보기' : d.blocks.length + '개 블록 · ' + E.tokens[d.theme].label;
   }
   var previewSoon = U.debounce(preview, 220);
   function changed() { saveSoon(); previewSoon(); }
   function onFrameLoad() {
     var fr = $('#frame'), doc = fr.contentDocument; if (!doc) return;
-    var ps0 = doc.querySelector('.ps'), foc = W.active() && S.focus != null && ps0 ? ps0.children[S.focus] : null;
+    var ps0 = doc.querySelector('.ps'), foc = guided() && S.focus != null && ps0 ? ps0.children[S.focus] : null;
     if (foc) {  // 안내 중에는 지금 다루는 칸으로 내려 테두리를 둘러 보여 줌
       foc.style.outline = '3px solid #8b85ff'; foc.style.outlineOffset = '-3px';
       try { fr.contentWindow.scrollTo(0, Math.max(0, foc.offsetTop - 12)); } catch (e) { /* 처음 */ }
@@ -39,6 +40,7 @@
       while (node && node.parentNode !== ps) node = node.parentNode;
       if (!ps || !node) return;
       var i = Array.prototype.indexOf.call(ps.children, node);
+      if (EZ.active()) return EZ.jump(i);
       if (W.active()) return W.jumpFill(i);
       S.tab = 'blocks'; S.sel = i; S.fsel = 0; renderTabs(); renderPane();
     });
@@ -186,7 +188,8 @@
   function pagesDialog() {
     var body = el('div'), list = el('div', { class: 'plist' }), g = el('div', { class: 'pgrid', style: 'margin-bottom:1.2rem' });
     var pick = function (d) { return function () { U.closeDialog(); openPage(newPage(d)); }; };
-    g.append(el('button', { class: 'pcard wzc', type: 'button', onclick: W.start }, [el('b', { text: '안내 따라 만들기' }), el('small', { text: '무엇을 · 이름 · 형태 · 디자인 · 기능 · 내용 순서로' })]));
+    g.append(el('button', { class: 'pcard wzc', type: 'button', onclick: EZ.start }, [el('b', { text: '쉽게 만들기' }), el('small', { text: '물음에 하나씩 답하면 페이지가 생겨요' })]));
+    g.append(el('button', { class: 'pcard', type: 'button', onclick: W.start }, [el('b', { text: '자세히 안내받기' }), el('small', { text: '무엇을 · 이름 · 형태 · 디자인 · 기능 · 내용 7단계' })]));
     g.append(el('button', { class: 'pcard', type: 'button', onclick: pick(BLANK) }, [el('b', { text: '빈 페이지' }), el('small', { text: '머리 · 히어로 · 바닥글만' })]));
     (D.core.examples || []).forEach(function (ex) { g.append(el('button', { class: 'pcard', type: 'button', onclick: pick(ex) }, [el('b', { text: ex.title }), el('small', { text: ex.blocks.length + '개 블록 견본' })])); });
     S.list.slice().sort(function (a, b) { return b.updated - a.updated; }).forEach(function (pg) {
@@ -194,7 +197,8 @@
       list.append(el('div', { class: 'prow' + (pg === S.cur ? ' cur' : '') }, [
         el('div', { onclick: function () { U.closeDialog(); openPage(pg); } }, [el('b', { text: pg.defn.title || '제목 없음' }),
           el('small', { text: pg.defn.blocks.length + '개 블록 · ' + (w.getMonth() + 1) + '-' + w.getDate() + ' ' + w.toTimeString().slice(0, 5) + ' 고침' +
-            (pg.wiz && !pg.wiz.done ? ' · 안내 ' + (pg.wiz.step + 1) + '/' + W.STEPS.length + ' 단계' : '') })]),
+            (pg.wiz && !pg.wiz.done ? ' · 안내 ' + (pg.wiz.step + 1) + '/' + W.STEPS.length + ' 단계' : '') +
+            (pg.easy && pg.easy.phase !== 'off' && pg.easy.phase !== 'done' ? ' · 쉽게 만들기 중' : '') })]),
         el('button', { class: 'btn sm', type: 'button', text: '복제', onclick: function () { var c = newPage(pg.defn); c.defn.title = (pg.defn.title || '') + ' 사본'; DB.put(c); pagesDialog(); } }),
         el('button', { class: 'btn sm danger', type: 'button', text: '지우기', disabled: S.list.length < 2, onclick: function (e) { U.sure(e.target, '지우기', function () {
           S.list = S.list.filter(function (x) { return x !== pg; }); DB.del(pg.id); if (pg === S.cur) openPage(S.list[0]); pagesDialog(); }); } })]));
@@ -236,8 +240,10 @@
   function renderTabs() { document.querySelectorAll('.tabs [data-tab]').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === S.tab)); }); }
   function renderPane() {
     var p = $('#pane'), top = p.scrollTop; p.innerHTML = '';
-    $('#app').classList.toggle('wiz', W.active());
-    if (W.active()) W.render(p);
+    var ez = EZ.active();
+    $('#app').classList.toggle('easy', ez); $('#app').classList.toggle('wiz', !ez && W.active());
+    if (ez) EZ.render(p);
+    else if (W.active()) W.render(p);
     else if (S.tab === 'blocks') (S.sel == null ? blocksPane : editorPane)(p);
     else if (S.tab === 'style') stylePane(p); else pagePane(p);
     p.scrollTop = top; $('#pname').value = defn().title || '';
@@ -250,7 +256,7 @@
     document.querySelectorAll('.mnav [data-m]').forEach(function (b) { b.onclick = function () {
       $('#app').dataset.m = b.dataset.m; document.querySelectorAll('.mnav [data-m]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); }; });
     $('#pname').addEventListener('input', function (e) { defn().title = e.target.value; changed(); });
-    $('#b-pages').onclick = pagesDialog; $('#b-export').onclick = exportDialog; $('#b-new').onclick = W.start;
+    $('#b-pages').onclick = pagesDialog; $('#b-export').onclick = exportDialog; $('#b-new').onclick = EZ.start;
     $('#frame').addEventListener('load', onFrameLoad);
   }
   function start() {
@@ -261,15 +267,17 @@
       F.init({ D: D, E: E, S: S, changed: changed, previewSoon: previewSoon });
       W.init({ D: D, E: E, S: S, DB: DB, $: $, defn: defn, changed: changed, preview: preview, renderPane: renderPane, newPage: newPage, openPage: openPage,
         exportDialog: exportDialog, fontCssFor: fontCssFor, save: function () { if (S.cur) { S.cur.updated = Date.now(); DB.put(S.cur); } } });
+      EZ.init({ D: D, E: E, S: S, DB: DB, $: $, defn: defn, changed: changed, preview: preview, renderPane: renderPane, newPage: newPage, openPage: openPage,
+        exportDoc: exportDoc, readImage: F.readImage, save: function () { if (S.cur) { S.cur.updated = Date.now(); DB.put(S.cur); } } });
       document.head.append(el('style', { text: fontCssFor(['pretendard'], function (p) { return "'data/fonts/" + p.file + "'"; }) }));
-      window.PS_APP = { E: E, D: D, S: S, W: W, exportDoc: exportDoc, openPage: openPage, newPage: newPage };  // 시험 · 살펴보기용
+      window.PS_APP = { E: E, D: D, S: S, W: W, EZ: EZ, exportDoc: exportDoc, openPage: openPage, newPage: newPage };  // 시험 · 살펴보기용
       bind();
       return DB.all();
     }).then(function (list) {
       S.list = list;
       var last = null; try { last = localStorage.getItem('ps-last'); } catch (e) { /* 저장소 막힘 */ }
       var pg = S.list.filter(function (x) { return x.id === last; })[0] || S.list[0];
-      if (!pg) return W.start();  // 처음 여는 기기는 안내부터
+      if (!pg) return EZ.start();  // 처음 여는 기기는 쉽게 만들기부터
       openPage(pg);
     }).catch(function (e) { $('#pane').innerHTML = ''; $('#pane').append(el('p', { class: 'hint', text: '앱 자료를 읽지 못했습니다 — ' + e.message })); });
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {

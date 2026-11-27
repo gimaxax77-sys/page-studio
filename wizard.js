@@ -271,6 +271,6 @@
       document.head.append(el('style', { text: X.fontCssFor(['suit', 'gowun-batang', 'black-han-sans'], function (p) { return "'data/fonts/" + p.file + "'"; }) }));
     },
     active: function () { var c = X && X.S.cur; return !!(c && c.wiz && !c.wiz.done); },
-    render: render, start: start, jumpFill: jumpFill, STEPS: STEPS
+    render: render, start: start, jumpFill: jumpFill, STEPS: STEPS, PURPOSES: PURPOSES, THEMES: THEMES  // 쉬운 만들기(easy.js)도 같은 종류 · 색 묶음을 씀
   };
 })(window);

@@ -176,5 +176,5 @@
     return wrap;
   }
 
-  root.PSFields = { init: function (ctx) { X = ctx; }, field: field, itemSummary: itemSummary, CHOICE_KO: CHOICE_KO };
+  root.PSFields = { init: function (ctx) { X = ctx; }, field: field, itemSummary: itemSummary, CHOICE_KO: CHOICE_KO, readImage: readImage };
 })(this);
