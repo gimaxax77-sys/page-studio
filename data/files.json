@@ -1,5 +1,5 @@
 {
-"version": "ba97331e2d",
+"version": "e4fa92b4c2",
 "files": [
 "./",
 "index.html",
@@ -7,6 +7,7 @@
 "engine.js",
 "ui.js",
 "fields.js",
+"wizard.js",
 "app.js",
 "manifest.webmanifest",
 "icon-192.png",
