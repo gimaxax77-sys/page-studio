@@ -1,7 +1,7 @@
 {
  "name": "페이지 공방",
  "short_name": "페이지 공방",
- "description": "부품을 쌓고 끌어 놓아 세련된 웹 페이지를 만드는 앱",
+ "description": "물음에 하나씩 답하면 내 웹 페이지가 생기는 앱 — 아이도 어르신도",
  "lang": "ko",
  "start_url": "./",
  "scope": "./",

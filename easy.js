@@ -270,7 +270,7 @@
     send = el('button', { class: 'btn pri ez-big', type: 'button', text: '📤 보내기', disabled: true, onclick: function () { share(); } });
     save = el('button', { class: 'btn ez-big', type: 'button', text: '💾 내 기기에 저장', disabled: true, onclick: function () { U.download(ready, fname(), 'text/html'); U.toast('저장했어요'); } });
     p.append(el('div', { class: 'ez-end' }, [send, save,
-      el('button', { class: 'btn ez-big', type: 'button', text: '✏️ 더 자세히 고치기', onclick: function () { ez().phase = 'off'; X.S.focus = null; X.S.tab = 'blocks'; X.save(); redraw(); X.preview(); } }),
+      el('button', { class: 'btn ez-big', type: 'button', text: '✏️ 더 고치기(순서 · 디자인 · 부분 더하기)', onclick: function () { ez().phase = 'off'; X.S.focus = null; X.S.sel = null; X.S.view = null; X.save(); redraw(); X.preview(); } }),
       el('button', { class: 'btn ghost', type: 'button', text: '새로 하나 더 만들기', onclick: start })]));
     ready = null;
     X.exportDoc().then(function (doc) { ready = doc; send.disabled = save.disabled = false; }, function (err) { U.toast(err.message); });

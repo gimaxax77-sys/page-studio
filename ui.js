@@ -33,10 +33,10 @@
     return d;
   }
   function closeDialog() { var d = $('#dlg'); if (d.open) d.close(); }
-  // 두 번 눌러야 지워지는 단추(확인 창 대신)
+  // 두 번 눌러야 지워지는 버튼(확인 창 대신)
   function sure(btn, label, act) {
     if (btn.dataset.sure !== '1') {
-      btn.dataset.sure = '1'; btn.textContent = '한 번 더';
+      btn.dataset.sure = '1'; btn.textContent = '정말요? 한 번 더 누르기';
       setTimeout(function () { btn.dataset.sure = ''; btn.textContent = label; }, 2500); return;
     }
     act();

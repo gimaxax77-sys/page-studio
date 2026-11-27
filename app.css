@@ -200,6 +200,30 @@ textarea.ez-inp{resize:vertical;line-height:1.55}
 .ez-nav{display:flex;gap:.6rem;padding:.7rem 1rem;border-top:1px solid var(--a-line);background:var(--a-panel);position:sticky;bottom:0;z-index:3}
 .ez-nav .btn{flex:1}
 .ez-nav .btn.pri{flex:2}
+/* 쉬운 고치기(simple.js) — 큰 글씨 · 큰 버튼, 탭 숨김 */
+.app.simple .tabs{display:none}
+.app.simple .main{grid-template-columns:minmax(360px,520px) 1fr}
+.app.simple .side{grid-template-rows:1fr}
+.app.simple .pane{padding:0;font-size:1.05rem}
+.app.simple .pane .inp{font-size:1.08rem;min-height:3rem;border-width:2px;border-radius:.7rem}
+.app.simple .pane .fld>label,.app.simple .pane legend{font-weight:700;font-size:1rem}
+.sp-top{display:grid;gap:.2rem;margin-bottom:1rem}
+.sp-back{justify-self:start;min-height:3rem;margin-bottom:.6rem;padding:.4rem 1rem}
+.sp-two{margin-bottom:1.3rem}
+.sp-h{margin:1.2rem 0 .55rem;font-size:1.05rem}
+.sp-list{display:grid;gap:.45rem}
+.sp-row{display:flex;gap:.4rem;align-items:stretch}
+.sp-name{flex:1;min-width:0;display:flex;gap:.7rem;align-items:center;text-align:left;min-height:3.6rem;padding:.55rem .8rem;border:2px solid var(--a-line);border-radius:.9rem;background:var(--a-panel)}
+.sp-name:hover{border-color:var(--a-accent)}
+.sp-name>i{font-style:normal;font-size:1.6rem;flex:none}
+.sp-name>span{display:grid;min-width:0}
+.sp-name b{font-size:1.05rem}
+.sp-name small{color:var(--a-muted);font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-mv{flex:0 0 3.2rem;min-height:3.6rem;font-size:1.25rem;border-width:2px;border-radius:.9rem}
+.sp-acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}
+.sp-chips .chip{min-height:3rem;font-size:1rem;padding:.4rem 1rem}
+.sp-fields .grp{border-width:2px;border-radius:.9rem}
+.back-simple{margin-bottom:.8rem}
 .mnav{display:none}
 @media (max-width:899px){
  .main{grid-template-columns:minmax(0,1fr)}
@@ -218,7 +242,9 @@ textarea.ez-inp{resize:vertical;line-height:1.55}
  .app.easy .main{grid-template-columns:minmax(0,1fr)}
  .app.easy .pane{padding-bottom:calc(3.8rem + env(safe-area-inset-bottom))}
  .app.easy .ez-nav{bottom:0}
- .app.easy .mnav button{padding:.7rem;font-size:1.05rem}
+ .app.easy .mnav button,.app.simple .mnav button{padding:.7rem;font-size:1.05rem}
+ .app.simple .main{grid-template-columns:minmax(0,1fr)}
+ .app.simple .pane{padding-bottom:calc(4.4rem + env(safe-area-inset-bottom))}
  .ez-q{font-size:1.5rem}
  .ez-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }

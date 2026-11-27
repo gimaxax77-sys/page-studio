@@ -1,5 +1,5 @@
 {
-"version": "991b67aa4c",
+"version": "9edf0cd653",
 "files": [
 "./",
 "index.html",
@@ -9,6 +9,7 @@
 "fields.js",
 "wizard.js",
 "easy.js",
+"simple.js",
 "app.js",
 "manifest.webmanifest",
 "icon-192.png",

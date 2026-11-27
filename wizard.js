@@ -2,16 +2,16 @@
 (function (root) {
   'use strict';
   var U = root.PSUI, F = root.PSFields, el = U.el, X = null;
-  var STEPS = ['무엇을', '이름', '형태', '디자인', '기능', '내용', '확인'];
+  var STEPS = ['무엇을', '이름', '구성', '디자인', '꾸밈', '내용', '확인'];
   var DESC = {
-    header: '맨 위 줄 — 이름(로고)과 메뉴 링크', hero: '첫 화면 — 큰 제목 · 설명 · 단추 · 그림', intro: '소개글 — 이야기를 몇 문단으로',
-    cards: '카드 — 메뉴 · 상품 · 기능을 3~6개 나란히', stats: '통계 — 숫자로 보여 주기(예: 손님 1,200명)', table: '표 — 시간표 · 요일별 메뉴처럼 줄과 칸',
-    figure: '그림 — 큰 사진 한 장과 설명', gallery: '갤러리 — 사진 여러 장', buttons: '단추 — 행동을 부르는 한 줄(예약 · 문의)',
-    footer: '바닥글 — 맨 아래 연락 · 저작권', pricing: '가격표 — 요금제 2~3개 견주기', faq: '자주 묻는 질문 — 묻고 답하기',
-    testimonials: '후기 — 손님 · 고객의 한마디', contact: '연락처 — 전화 · 주소 · 메일 · 지도 링크', free: '자유 배치 — 글 · 그림을 판 위에 끌어 놓기',
-    badge: '배지 — 작은 꼬리표(신메뉴 · 무료 등)', progress: '진행 막대 — 목표까지 얼마나 왔나', ring: '원형 진행 — 퍼센트를 원으로',
-    steps: '단계 — 1 · 2 · 3 순서 안내', loader: '로더 — 도는 원 같은 움직이는 꾸밈', alert: '알림 — 눈에 띄는 안내 한 줄',
-    tabs: '탭 — 눌러서 바꿔 보는 내용', timeline: '타임라인 — 날짜별 이력 · 일정', icon: '아이콘 줄 — 아이콘과 짧은 글',
+    header: '위쪽 메뉴 — 맨 위 이름(로고)과 메뉴', hero: '첫 화면 — 큰 제목 · 설명 · 버튼 · 사진', intro: '소개글 — 이야기를 몇 문단으로',
+    cards: '카드 — 메뉴 · 상품 · 자랑거리를 3~6개 나란히', stats: '숫자 자랑 — 숫자로 보여 주기(예: 손님 1,200명)', table: '표 — 시간표 · 요일별 메뉴처럼 줄과 칸',
+    figure: '큰 사진 — 사진 한 장과 설명', gallery: '사진 모음 — 사진 여러 장', buttons: '버튼 줄 — 예약 · 문의처럼 누르게 하는 버튼',
+    footer: '맨 아래 — 연락처 · 저작권 한 줄', pricing: '가격표 — 요금 2~3가지 견주기', faq: '자주 묻는 질문 — 묻고 답하기',
+    testimonials: '후기 — 손님 · 고객의 한마디', contact: '연락처 — 전화 · 주소 · 메일 · 지도', free: '자유롭게 놓기 — 글 · 사진을 도화지 위에 끌어 놓기',
+    badge: '꼬리표 — 작은 표시(신메뉴 · 무료 등)', progress: '진행 막대 — 목표까지 얼마나 왔나', ring: '동그라미 진행 — 몇 퍼센트인지 동그라미로',
+    steps: '단계 — 1 · 2 · 3 순서 안내', loader: '빙글빙글 표시 — 도는 동그라미 같은 움직이는 꾸밈', alert: '알림 — 눈에 띄는 안내 한 줄',
+    tabs: '눌러 바꿔 보기 — 이름을 누르면 내용이 바뀜', timeline: '날짜별 기록 — 날짜마다 있었던 일 · 일정', icon: '아이콘 줄 — 아이콘과 짧은 글',
     sticker: '스티커 — 귀여운 그림 하나', pattern: '배경 무늬 — 꾸밈용 무늬 띠'
   };
   var PURPOSES = [
@@ -27,7 +27,7 @@
       blocks: ['header', 'hero', 'intro', 'figure', 'stats', 'testimonials', 'footer'], small: [], tip: ['겨울 바다', '겨울 바다를 걷는 법', '바람이 센 날, 바다는 더 또렷해집니다'] },
     { id: 'me', name: '자기소개', desc: '나를 소개하는 한 장(명함 · 이력)', ex: 1, theme: 'radix-teal-light', look: 'glass', font: { body: 'pretendard' },
       blocks: ['hero', 'intro', 'gallery', 'contact', 'footer'], small: ['timeline', 'badge'], tip: ['김한별', '움직임으로 이야기하는 디자이너', '앱 · 광고 · 발표 자료에 움직임을 더합니다'] },
-    { id: 'blank', name: '빈 것에서', desc: '머리 · 첫 화면 · 바닥글만 두고 직접 쌓기', ex: -1, theme: 'daisy-nord', look: 'plain', font: { body: 'pretendard' },
+    { id: 'blank', name: '빈 것에서', desc: '위쪽 메뉴 · 첫 화면 · 맨 아래만 두고 직접 채우기', ex: -1, theme: 'daisy-nord', look: 'plain', font: { body: 'pretendard' },
       blocks: ['header', 'hero', 'footer'], small: [], tip: ['내 페이지', '큰 제목을 적어 주세요', '한 줄 소개를 적어 주세요'] }
   ];
   var LOOKS = { plain: '깔끔하고 무난한 기본', glass: '반투명 면 · 은은한 빛', mag: '명조 제목 · 넓은 여백', brutal: '굵은 테두리 · 강한 대비',
@@ -42,11 +42,11 @@
     soft: ['daisy-cupcake', 'daisy-pastel', 'daisy-valentine', 'daisy-garden', 'daisy-fantasy', 'daisy-emerald', 'radix-crimson-light', 'flowbite-playful-light']
   };
   var FONTS = [
-    { label: '깔끔한 고딕', body: 'pretendard', sample: '가장 무난한 글꼴' },
-    { label: '부드러운 고딕', body: 'suit', sample: '둥글고 다정한 느낌' },
-    { label: '명조', body: 'gowun-batang', sample: '긴 글 · 잡지 느낌' },
-    { label: '굵은 제목 + 고딕', body: 'pretendard', head: 'black-han-sans', sample: '제목이 크게 튀는 느낌' },
-    { label: '명조 제목 + 고딕', body: 'pretendard', head: 'gowun-batang', sample: '읽기 쉬운 본문에 우아한 제목' }
+    { label: '또박또박', body: 'pretendard', sample: '가장 무난하고 읽기 쉬움' },
+    { label: '동글동글', body: 'suit', sample: '둥글고 다정한 느낌' },
+    { label: '붓글씨 느낌', body: 'gowun-batang', sample: '긴 글 · 잡지 느낌' },
+    { label: '굵은 제목', body: 'pretendard', head: 'black-han-sans', sample: '제목이 크게 튀는 느낌' },
+    { label: '붓글씨 제목', body: 'pretendard', head: 'gowun-batang', sample: '읽기 쉬운 글에 우아한 제목' }
   ];
   var MOTION = [['0', '차분', '움직임 없이 조용히'], ['1', '보통', '내릴 때 살짝 떠오름'], ['2', '많음', '눈에 띄게 움직임']];
 
@@ -56,9 +56,10 @@
   function head(t, s) { return el('div', { class: 'wz-head' }, [el('h2', { text: t }), s ? el('p', { class: 'hint', text: s }) : null]); }
   function card(on, kids, onclick, cls) { return el('button', { type: 'button', class: 'wz-card' + (cls ? ' ' + cls : ''), 'aria-pressed': String(!!on), onclick: onclick }, kids); }
   function redraw() { X.renderPane(); }
+  function fk(k) { var m = root.PSSimple && root.PSSimple.FONT_KO; return (m && m[k]) || X.D.core.fonts[k].family; }  // 글씨체 우리말 이름
   function focusOn(i) { X.S.focus = i; X.preview(); }
 
-  // ── 블록 만들기 — 고른 목적의 견본에 같은 부품이 있으면 그 글을, 없으면 부품 기본 견본을 넣는다 ──
+  // ── 부분 만들기 — 고른 목적의 예시에 같은 부분이 있으면 그 글을, 없으면 그 부분의 기본 예시를 넣는다 ──
   function makeBlock(pu, id) {
     var ex = pu.ex >= 0 ? ((X.D.core.examples || [])[pu.ex] || {}).blocks || [] : [];
     var src = ex.filter(function (x) { return x.part === id; })[0], p = part(id);
@@ -109,7 +110,7 @@
   function shapeStep(p) {
     var d = X.defn(), bl = d.blocks, ul = el('ul', { class: 'blist' }), idx = [];
     bl.forEach(function (b, i) { if (part(b.part).kind === 'block') idx.push(i); });
-    p.append(head('들어갈 칸과 순서', purpose().name + '에 맞는 칸을 미리 골라 두었습니다. 빼거나 더하고, 화살표로 순서를 바꿉니다.'));
+    p.append(head('들어갈 부분과 순서', purpose().name + '에 맞는 부분을 미리 골라 두었습니다. 빼거나 더하고, 화살표로 순서를 바꿉니다.'));
     function swap(a, b) { var t = bl[a]; bl[a] = bl[b]; bl[b] = t; X.S.focus = b; X.changed(); redraw(); }
     idx.forEach(function (i, k) {
       var b = bl[i];
@@ -121,13 +122,13 @@
           el('button', { class: 'btn sm ghost ico danger', type: 'button', 'aria-label': '빼기', text: '✕', disabled: idx.length < 2, onclick: function () {
             bl.splice(i, 1); X.S.focus = null; X.changed(); redraw(); } })])]));
     });
-    p.append(ul, el('h3', { text: '더 넣을 수 있는 칸' }));
+    p.append(ul, el('h3', { text: '더 넣을 수 있는 부분' }));
     var have = bl.map(function (b) { return b.part; }), more = el('div', { class: 'wz-grid' });
     X.D.core.catalog.parts.forEach(function (pp) {
       if (pp.kind !== 'block' || have.indexOf(pp.id) >= 0) return;
       more.append(card(false, [el('b', { text: '+ ' + pp.name }), el('small', { text: DESC[pp.id] || '' })], function () {
         var at = pp.id === 'header' ? 0 : insertAt(); bl.splice(at, 0, makeBlock(purpose(), pp.id)); applyNames();
-        X.S.focus = at; X.changed(); redraw(); U.toast(pp.name + ' 칸을 넣었습니다'); }));
+        X.S.focus = at; X.changed(); redraw(); U.toast(pp.name + ' 부분을 넣었습니다'); }));
     });
     p.append(more);
   }
@@ -136,11 +137,14 @@
     var c = t.color;
     return el('button', { class: 'sw', type: 'button', 'aria-pressed': String(on), onclick: cb },
       [el('i', { html: ['bg', 'primary', 'accent', 'fg'].map(function (k) { return '<b style="background:' + c[k] + '"></b>'; }).join('') }),
-        el('span', { text: t.label }), el('small', { text: t.scheme === 'dark' ? '어두움' : '밝음' })]);
+        el('span', { text: t.label })]);
   }
   function designStep(p) {
-    var d = X.defn(), w = wiz(), look = d.look || 'plain', set = function () { X.changed(); redraw(); };
-    p.append(head('디자인', '위에서부터 분위기 → 색 → 글꼴 → 어두운 화면 순서로 고릅니다. 누를 때마다 미리보기가 바뀝니다(폰은 아래 «미리보기»).'));
+    p.append(head('디자인', '위에서부터 분위기 → 색상 → 글씨체 → 어두운 화면 순서로 고릅니다. 누를 때마다 미리보기가 바뀝니다(폰은 아래 «미리보기»).'));
+    design(p, wiz());
+  }
+  function design(p, w) {  // w = 이 화면 상태(모두 보기 여부) — 쉬운 고치기(simple.js)도 씀
+    var d = X.defn(), look = d.look || 'plain', set = function () { X.changed(); redraw(); };
     p.append(el('h3', { text: '1. 분위기' }), el('div', { class: 'wz-grid' }, Object.keys(LOOKS).map(function (k) {
       return card(look === k, [el('i', { class: 'lk lk-' + k, text: 'Aa 가' }), el('b', { text: X.D.core.catalog.looks[k] }), el('small', { text: LOOKS[k] })], function () {
         d.look = k; if (THEMES[k].indexOf(d.theme) < 0) { d.theme = THEMES[k][0]; delete d.dark_theme; U.toast('분위기에 맞춰 색도 바꿨습니다'); } set(); });
@@ -149,10 +153,10 @@
     (w.allThemes ? X.D.core.tokens.map(function (t) { return t.id; }) : rec).forEach(function (id) {
       sw.append(swatch(X.E.tokens[id], d.theme === id, function () { d.theme = id; delete d.dark_theme; set(); }));
     });
-    p.append(el('h3', { text: '2. 색' }), el('p', { class: 'hint', text: w.allThemes ? '57가지 모두입니다.' : X.D.core.catalog.looks[look] + ' 분위기에 어울리는 8가지입니다.' }), sw,
+    p.append(el('h3', { text: '2. 색상' }), el('p', { class: 'hint', text: w.allThemes ? '57가지 모두입니다.' : '«' + X.D.core.catalog.looks[look] + '» 분위기에 어울리는 8가지입니다.' }), sw,
       el('button', { class: 'btn sm ghost', type: 'button', text: w.allThemes ? '추천만 보기' : '57가지 모두 보기', onclick: function () { w.allThemes = !w.allThemes; redraw(); } }));
     var f = d.font || {}, lh = X.D.core.lookHead[look];
-    p.append(el('h3', { text: '3. 글꼴' }), lh ? el('p', { class: 'hint', text: X.D.core.catalog.looks[look] + ' 분위기는 제목을 ' + X.D.core.fonts[lh].family + '로 씁니다. 제목 글꼴이 따로 있는 것을 고르면 그쪽이 앞섭니다.' }) : null,
+    p.append(el('h3', { text: '3. 글씨체' }), lh ? el('p', { class: 'hint', text: '«' + X.D.core.catalog.looks[look] + '» 분위기는 제목을 ' + fk(lh) + '로 씁니다. 제목 글씨체가 따로 있는 것을 고르면 그쪽이 앞섭니다.' }) : '',
       el('div', { class: 'wz-grid' }, FONTS.map(function (o) {
       var fam = function (k) { return "'" + X.D.core.fonts[k].family + "',sans-serif"; };
       return card(f.body === o.body && (f.head || null) === (o.head || null), [
@@ -171,7 +175,7 @@
   // ── ⑤ 기능 ──
   function featStep(p) {
     var d = X.defn(), bl = d.blocks;
-    p.append(head('기능', '움직임과 작은 기능 부품을 고릅니다. 켜면 바닥글 바로 위에 들어가고, 순서는 ⑥에서 바꿀 수 있습니다.'));
+    p.append(head('꾸밈', '움직임과 작은 꾸밈을 고릅니다. 켜면 맨 아래 부분 바로 위에 들어가고, 순서는 ③에서 바꿀 수 있습니다.'));
     p.append(el('h3', { text: '움직임' }), el('div', { class: 'wz-grid' }, MOTION.map(function (m) {
       return card(String(d.motion == null ? 1 : d.motion) === m[0], [el('b', { text: m[1] }), el('small', { text: m[2] })], function () { d.motion = +m[0]; X.changed(); redraw(); });
     })));
@@ -184,8 +188,8 @@
         else { var at = insertAt(); bl.splice(at, 0, makeBlock(purpose(), pp.id)); X.S.focus = at; }
         X.changed(); redraw(); }));
     });
-    p.append(el('h3', { text: '작은 기능 부품' }), g,
-      el('p', { class: 'hint wz-note', text: '만든 페이지는 HTML 한 장이라, 서버가 필요한 기능(신청서 받기 · 회원 가입 · 결제)은 넣을 수 없습니다. 연락처 칸의 전화 · 메일 · 링크로 대신합니다.' }));
+    p.append(el('h3', { text: '작은 꾸밈' }), g,
+      el('p', { class: 'hint wz-note', text: '만든 페이지는 웹 페이지 파일 하나라서 신청서 받기 · 회원 가입 · 결제는 넣을 수 없습니다. 연락처 부분의 전화 · 메일 · 링크로 대신합니다.' }));
   }
   // ── ⑥ 내용 ──
   function untouched(b) { var o = wiz().orig[b.id]; return o != null && o === JSON.stringify(b.content); }
@@ -194,7 +198,7 @@
     if (w.fill == null || w.fill >= bl.length) w.fill = 0;
     var b = bl[w.fill], pp = part(b.part);
     if (X.S.focus !== w.fill) focusOn(w.fill);
-    p.append(head('내용 채우기 · ' + (w.fill + 1) + ' / ' + bl.length, '칸마다 견본 글을 내 글로 바꿉니다. 사진 칸은 고르기 상자에서 «내 사진 올리기»를 고릅니다. 미리보기에서 칸을 눌러도 그 칸으로 옵니다.'));
+    p.append(head('내용 채우기 · ' + (w.fill + 1) + ' / ' + bl.length, '부분마다 예시 글을 내 글로 바꿉니다. 사진은 고르기 상자에서 «내 사진 넣기»를 고릅니다. 미리보기에서 눌러도 그 부분으로 옵니다.'));
     p.append(el('div', { class: 'chips wz-jump' }, bl.map(function (x, i) {
       return el('button', { class: 'chip', type: 'button', 'aria-pressed': String(i === w.fill), text: (i + 1) + ' ' + part(x.part).name + (untouched(x) ? '' : ' ✓'),
         onclick: function () { w.fill = i; redraw(); } });
@@ -205,28 +209,28 @@
     if (b.content == null) b.content = U.clone(pp.sample);
     Object.keys(pp.slots).forEach(function (k) { p.append(F.field(pp.slots, k, b.content, redraw)); });
     p.append(el('div', { class: 'row wz-sub' }, [
-      el('button', { class: 'btn sm', type: 'button', text: '← 앞 칸', disabled: w.fill === 0, onclick: function () { w.fill -= 1; redraw(); X.$('#pane').scrollTop = 0; } }),
-      el('button', { class: 'btn sm', type: 'button', text: '다음 칸 →', disabled: w.fill === bl.length - 1, onclick: function () { w.fill += 1; redraw(); X.$('#pane').scrollTop = 0; } })]));
+      el('button', { class: 'btn sm', type: 'button', text: '← 앞 부분', disabled: w.fill === 0, onclick: function () { w.fill -= 1; redraw(); X.$('#pane').scrollTop = 0; } }),
+      el('button', { class: 'btn sm', type: 'button', text: '다음 부분 →', disabled: w.fill === bl.length - 1, onclick: function () { w.fill += 1; redraw(); X.$('#pane').scrollTop = 0; } })]));
   }
   // ── ⑦ 확인 ──
   function doneStep(p) {
     var d = X.defn(), w = wiz(), f = d.font || {}, left = [], hd = f.head || X.D.core.lookHead[d.look || 'plain'];
     d.blocks.forEach(function (b, i) { if (untouched(b)) left.push(i); });
-    var fam = function (k) { return k ? X.D.core.fonts[k].family : ''; };
-    p.append(head('다 됐습니다', '미리보기가 완성된 페이지입니다. 내보내면 바깥 요청 없는 HTML 한 장이 됩니다.'));
+    var fam = function (k) { return k ? fk(k) : ''; };
+    p.append(head('다 됐습니다', '미리보기가 완성된 페이지입니다. 저장하면 인터넷 없이도 열리는 웹 페이지 파일 하나가 됩니다.'));
     p.append(el('dl', { class: 'wz-sum' }, [
-      ['종류', purpose().name], ['이름', d.title || '(없음)'], ['칸', d.blocks.length + '개'], ['분위기', X.D.core.catalog.looks[d.look || 'plain']],
-      ['색', X.E.tokens[d.theme].label + (d.dark_theme ? ' · 기기 따라 어둡게' : '')], ['글꼴', fam(f.body) + (hd && hd !== f.body ? ' · 제목 ' + fam(hd) : '')],
+      ['종류', purpose().name], ['이름', d.title || '(없음)'], ['부분', d.blocks.length + '개'], ['분위기', X.D.core.catalog.looks[d.look || 'plain']],
+      ['색상', X.E.tokens[d.theme].label + (d.dark_theme ? ' · 기기 따라 어둡게' : '')], ['글씨체', fam(f.body) + (hd && hd !== f.body ? ' · 제목 ' + fam(hd) : '')],
       ['움직임', MOTION[d.motion == null ? 1 : d.motion][1]]].reduce(function (a, r) { return a.concat([el('dt', { text: r[0] }), el('dd', { text: r[1] })]); }, [])));
     if (left.length) {
-      p.append(el('h3', { text: '아직 견본 글 그대로인 칸 · ' + left.length + '개' }), el('p', { class: 'hint', text: '누르면 그 칸 채우기로 갑니다.' }),
+      p.append(el('h3', { text: '아직 예시 글 그대로인 부분 · ' + left.length + '개' }), el('p', { class: 'hint', text: '누르면 그 부분 채우기로 갑니다.' }),
         el('div', { class: 'chips' }, left.map(function (i) {
           return el('button', { class: 'chip', type: 'button', text: (i + 1) + ' ' + part(d.blocks[i].part).name, onclick: function () { w.fill = i; go(5); } });
         })));
-    } else p.append(el('p', { class: 'ok', text: '모든 칸을 내 글로 바꿨습니다.' }));
+    } else p.append(el('p', { class: 'ok', text: '모든 부분을 내 글로 바꿨습니다.' }));
     p.append(el('div', { class: 'wz-end' }, [
-      el('button', { class: 'btn pri', type: 'button', text: '내보내기', onclick: X.exportDialog }),
-      el('button', { class: 'btn', type: 'button', text: '자세히 고치기(블록 편집기)', onclick: finish }),
+      el('button', { class: 'btn pri', type: 'button', text: '📤 저장 · 보내기', onclick: X.exportDialog }),
+      el('button', { class: 'btn', type: 'button', text: '✏️ 더 고치기', onclick: finish }),
       el('button', { class: 'btn ghost', type: 'button', text: '새 페이지 하나 더', onclick: start })]));
   }
 
@@ -262,7 +266,7 @@
     pg.wiz = { step: 0, orig: {} }; X.S.focus = null; X.DB.put(pg); X.openPage(pg);
     if (root.innerWidth >= 900) { var pc = X.$('[data-dev=pc]'); if (pc) pc.click(); }
   }
-  function finish() { wiz().done = true; X.S.focus = null; X.S.tab = 'blocks'; X.save(); redraw(); X.preview(); U.toast('이제 블록 편집기에서 자세히 고칠 수 있습니다'); }
+  function finish() { wiz().done = true; X.S.focus = null; X.S.sel = null; X.S.view = null; X.save(); redraw(); X.preview(); U.toast('이제 고칠 곳을 눌러 하나씩 고칠 수 있습니다'); }
   function jumpFill(i) { var w = wiz(); if (!w.purpose) return; w.fill = i; go(5); }
 
   root.PSWizard = {
@@ -271,6 +275,7 @@
       document.head.append(el('style', { text: X.fontCssFor(['suit', 'gowun-batang', 'black-han-sans'], function (p) { return "'data/fonts/" + p.file + "'"; }) }));
     },
     active: function () { var c = X && X.S.cur; return !!(c && c.wiz && !c.wiz.done); },
-    render: render, start: start, jumpFill: jumpFill, STEPS: STEPS, PURPOSES: PURPOSES, THEMES: THEMES  // 쉬운 만들기(easy.js)도 같은 종류 · 색 묶음을 씀
+    render: render, start: start, jumpFill: jumpFill, STEPS: STEPS, PURPOSES: PURPOSES, THEMES: THEMES,  // 쉬운 만들기(easy.js)도 같은 종류 · 색 묶음을 씀
+    DESC: DESC, design: design  // 쉬운 고치기(simple.js)가 부분 설명 · 디자인 고르기를 씀
   };
 })(window);

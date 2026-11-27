@@ -1,11 +1,11 @@
-// 페이지 공방 내용 칸 입력 — 부품의 칸 정의(parts.json slots)를 보고 입력 폼을 만든다. 자유 배치 판(끌어 옮기기)도 여기
+// 페이지 공방 내용 칸 입력 — 부분의 칸 정의(parts.json slots)를 보고 입력 칸을 만든다. 자유롭게 놓기 도화지(끌어 옮기기)도 여기
 (function (root) {
   'use strict';
   var U = root.PSUI, el = U.el;
-  var CHOICE_KO = { split: '옆으로 나란히', center: '가운데', primary: '주색', neutral: '무채색', success: '초록(좋음)', warning: '노랑(주의)',
-    error: '빨강(위험)', info: '파랑(안내)', outline: '테두리만', done: '끝', now: '지금', todo: '할 일', spin: '도는 원', dots: '점',
-    bar: '흐르는 막대', pulse: '숨쉬는 점', grid: '격자', lines: '빗금', waves: '물결', glow: '빛 번짐', mesh: '그러데이션',
-    title: '제목', text: '글', sticker: '스티커', icon: '아이콘', badge: '배지', '16/9': '와이드 16:9', '4/3': '4:3', '1/1': '정사각', '3/4': '세로 3:4' };
+  var CHOICE_KO = { split: '사진을 옆에', center: '가운데 모아서', primary: '진한 색', neutral: '회색', success: '초록(좋음)', warning: '노랑(주의)',
+    error: '빨강(위험)', info: '파랑(안내)', outline: '테두리만', done: '끝', now: '지금', todo: '할 일', spin: '도는 동그라미', dots: '점',
+    bar: '흐르는 막대', pulse: '숨쉬는 점', grid: '바둑판', lines: '빗금', waves: '물결', glow: '은은한 빛', mesh: '여러 색 섞임',
+    title: '제목', text: '글', sticker: '스티커', icon: '아이콘', badge: '꼬리표', '16/9': '가로로 긴 것', '4/3': '조금 가로로 긴 것', '1/1': '정사각형', '3/4': '세로로 긴 것' };
   var X = null;  // { D, E, S, changed, previewSoon } — app.js 가 init 으로 넣음
 
   function iconPicker(onPick) {
@@ -40,7 +40,7 @@
         c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
         cb(c.toDataURL('image/jpeg', 0.82));
       };
-      img.onerror = function () { U.toast('그림을 읽지 못했습니다'); };
+      img.onerror = function () { U.toast('사진을 읽지 못했습니다'); };
       img.src = r.result;
     };
     r.readAsDataURL(file);
@@ -81,19 +81,19 @@
     if (t === 'icon') {
       var has = obj[k] && X.D.icons[obj[k]];
       return wrap(el('div', { class: 'row' }, [
-        el('button', { class: 'btn pick', id: id, type: 'button', html: (has ? X.E.icon(obj[k]) : '') + '<span>' + (obj[k] || '고르기') + '</span>',
+        el('button', { class: 'btn pick', id: id, type: 'button', html: (has ? X.E.icon(obj[k]) : '') + '<span>' + (obj[k] ? '바꾸기' : '고르기') + '</span>',
           onclick: function () { iconPicker(function (n) { set(n); redo(); }); } }),
         obj[k] ? el('button', { class: 'btn sm ghost', type: 'button', text: '빼기', onclick: function () { set(''); redo(); } }) : null]));
     }
     if (t === 'sticker') return wrap(el('button', { class: 'btn pick', id: id, type: 'button',
-      html: (obj[k] ? '<img alt="" src="' + X.D.stickers[obj[k]] + '">' : '') + '<span>' + (obj[k] ? obj[k].replace(/_/g, ' ') : '고르기') + '</span>',
+      html: (obj[k] ? '<img alt="" src="' + X.D.stickers[obj[k]] + '">' : '') + '<span>' + (obj[k] ? '바꾸기' : '고르기') + '</span>',
       onclick: function () { stickerPicker(function (n) { set(n); redo(); }); } }));
     if (t === 'image') {
       var v = obj[k] || '', isPh = !v || v.indexOf('ph:') === 0;
       var file = el('input', { type: 'file', accept: 'image/*', hidden: true, onchange: function (e) { var f = e.target.files[0]; if (f) readImage(f, function (u) { set(u); redo(); }); } });
       var sel = el('select', { class: 'inp', id: id, onchange: function (e) { if (e.target.value === 'up') file.click(); else { set(e.target.value); redo(); } } },
-        [0, 1, 2, 3, 4, 5].map(function (n) { return el('option', { value: 'ph:' + n, selected: v === 'ph:' + n, text: '그림 자리 ' + (n + 1) + '(테마 색)' }); })
-          .concat([el('option', { value: 'up', selected: !isPh, text: isPh ? '내 사진 올리기…' : '올린 사진(바꾸려면 고르기)' })]));
+        [0, 1, 2, 3, 4, 5].map(function (n) { return el('option', { value: 'ph:' + n, selected: v === 'ph:' + n, text: '빈 사진 자리 ' + (n + 1) }); })
+          .concat([el('option', { value: 'up', selected: !isPh, text: isPh ? '📷 내 사진 넣기…' : '넣은 사진(바꾸려면 고르기)' })]));
       return wrap(el('div', {}, [sel, file, !isPh ? el('img', { src: v, alt: '', style: 'max-width:100%;max-height:8rem;border-radius:.5rem;margin-top:.4rem' }) : null]));
     }
     if (t === 'group') {
@@ -169,10 +169,10 @@
       return el('button', { class: 'chip', type: 'button', text: '+ ' + CHOICE_KO[kind], onclick: function () {
         var it = { kind: kind, x: 10, y: 10, w: kind === 'sticker' || kind === 'icon' ? 14 : kind === 'title' ? 60 : 40 };
         if (kind === 'sticker') it.sticker = 'sparkles'; else if (kind === 'icon') it.icon = 'star';
-        else it.text = kind === 'title' ? '새 제목' : kind === 'badge' ? '새 배지' : '새 글';
+        else it.text = kind === 'title' ? '새 제목' : kind === 'badge' ? '새 꼬리표' : '새 글';
         items.push(it); S.fsel = items.length - 1; X.changed(); rer(); } });
     }));
-    wrap.append(el('p', { class: 'hint', text: '판 위의 것을 손가락이나 마우스로 끌어 옮깁니다. 위치는 판 크기의 % 라서 폰 · PC 에서 같은 모양입니다.' }), box, adds, selBox);
+    wrap.append(el('p', { class: 'hint', text: '도화지 위의 것을 손가락이나 마우스로 끌어 옮깁니다. 폰 · 컴퓨터 어디서 봐도 같은 자리에 보입니다.' }), box, adds, selBox);
     return wrap;
   }
 

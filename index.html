@@ -19,13 +19,13 @@
     <input class="pname" id="pname" aria-label="페이지 이름" value="">
     <button class="btn sm" id="b-new" type="button">+ 새로</button>
     <button class="btn sm" id="b-pages" type="button">목록</button>
-    <button class="btn sm pri" id="b-export" type="button">내보내기</button>
+    <button class="btn sm pri" id="b-export" type="button">저장 · 보내기</button>
   </header>
   <div class="main">
     <aside class="side">
       <div class="tabs" role="tablist">
-        <button role="tab" data-tab="blocks" aria-selected="true">블록</button>
-        <button role="tab" data-tab="style" aria-selected="false">꾸미기</button>
+        <button role="tab" data-tab="blocks" aria-selected="true">부분</button>
+        <button role="tab" data-tab="style" aria-selected="false">디자인</button>
         <button role="tab" data-tab="page" aria-selected="false">페이지</button>
       </div>
       <div class="pane" id="pane"><p class="hint">불러오는 중…</p></div>
@@ -33,7 +33,7 @@
     <section class="view">
       <div class="vbar"><span id="vinfo">미리보기</span><span class="sp"></span>
         <button class="chip" data-dev="phone" aria-pressed="true" type="button">폰</button>
-        <button class="chip" data-dev="pc" aria-pressed="false" type="button">PC</button></div>
+        <button class="chip" data-dev="pc" aria-pressed="false" type="button">컴퓨터</button></div>
       <div class="stage"><iframe class="frame phone" id="frame" title="만드는 페이지 미리보기"></iframe></div>
     </section>
   </div>
@@ -48,6 +48,7 @@
 <script src="fields.js"></script>
 <script src="wizard.js"></script>
 <script src="easy.js"></script>
+<script src="simple.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
