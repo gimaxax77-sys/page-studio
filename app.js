@@ -272,7 +272,11 @@
       if (!pg) return W.start();  // 처음 여는 기기는 안내부터
       openPage(pg);
     }).catch(function (e) { $('#pane').innerHTML = ''; $('#pane').append(el('p', { class: 'hint', text: '앱 자료를 읽지 못했습니다 — ' + e.message })); });
-    if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(function () { /* 오프라인 저장 없이도 돎 */ });
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      var hadSW = !!navigator.serviceWorker.controller;  // 새 판 일꾼이 자리를 잡으면 한 번 다시 열어 새 화면으로(처음 설치 때는 그대로)
+      navigator.serviceWorker.addEventListener('controllerchange', function () { if (hadSW) { hadSW = false; saveSoon(); setTimeout(function () { location.reload(); }, 500); } });
+      navigator.serviceWorker.register('sw.js').catch(function () { /* 오프라인 저장 없이도 돎 */ });
+    }
   }
   start();
 })();
